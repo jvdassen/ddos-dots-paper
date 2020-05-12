@@ -19,7 +19,6 @@ It fits pretty much on one page and is definitely not longer.}
 
 In this chapter, an introduction into Denial-of-Service (DoS) attacks as well as Distributed Denial-of-Service attacks (DDoS) attacks, is given. Thus, first the motivation behind this topic is provided, then some DoS and DDoS techniques are presented. The chapter is finalized with the topic of multivector attacks.
 
-%jan:%
 \subsection{Motivation}
 
 There are people who want to harm other people and over time, the possible ways of doing so changed a lot. With the age of digitization and the incoming digital revolution, all different forms of computers became attractive for hackers and other people with bad intentions. Thus, the more computers, smartphones, smart devices or any other device communicating with the Internet are available, the more potential targets arise. With respect to the increasing number of network available devices used every day, it is important to analyze at possibilities against various kinds of attacks.
@@ -282,36 +281,10 @@ Another implementation which can be considered to be open was developed by Rodri
 
 These decentralized approaches may open a number of advantages in mitigating DDoS attacks. Firstly, they could increase the capacities and secondly they might provide a different perspective which may allow for more efficient detection of such attacks. Given their complex and decentralized nature such services could make use of a standardized protocol which may increase the compatibility between a large number of providers. However, such a protocol would need to be able to reflect the relationships and operations as they would be required with a decentralized approach.
 
-%%-----------------------------------------------------------------
-%\section{Background}
-%Some text about this chapter's content. This chapter will be more technical than the previous \emph{Introduction} one. 
-%
-%jan:%
-
-%For example:
-%\begin{itemize}
-%    \item Autonomous systems -> rfc1930
-%    \item How traffic is routed between ASes ->  rfc4271
-%    \item How protection from unwanted traffic normally works and why it does not work with DDoS attacks 
-%    \item SDN?
-%    \item Anycast routing
-%    \item Related standards / protocols such as CoAP -> rfc7252
-%      -> similar to HTTP, but over UDP, subset of HTTP, URIs, DTLS, RESTlike functionality for constrained devices, maybe outline the most important terminology since this would be visited again in the protocol design (if we choose to detail the design): \url{https://tools.ietf.org/html/rfc7252#section-1.2}
-%    \item RESTconf -> rfc8040
-%    \item What is the IETF, their goals and incentives.
-%    %jan: %
-%    For the presentation we can maybe also include a who-is-who in the internet world? E.g. IANA, IEEE, IETF, ITU etc
-%    \item Maybe also which organizations are involved in the dev of tihs standard, e.g. NTT
-%\end{itemize}{}
-
 \section{IETF DOTS}
 The previous chapters provided an introduction to DDoS attacks and existing mitigation approaches. This chapter introduces the efforts of the DOTS working group. Specifically, we give an introduction to the terminology followed by the use cases in which the standard should prove useful, thus, showing the objectives of the working group. The remaining subsections will introduce the architecture and design of the standard which shows how the standard is supposed to solve the problems mentioned before.
 
 \subsection{DOTS}
-% What is DOTS and how does it work 
-
-%\textrightarrow maybe introduce the basic components? % TODO TS
-%In order to explain the way how DOTS intends to solve the problem of DDoS mitigation we will introduce the most important terminology which will be used in the following chapters about requirements and the DOTS architecture.?
 
 DOTS stands for DDoS Open Threat Signaling and is a standard currently developed at IETF (Internet Engineering Task Force). DOTS can be described as a set of methods and principles to coordinate defensive measures applied by mitigating peers. As such, DOTS is specified to strictly exist as a standard focused on signaling, which means that in currently published standard document drafts state actual mitigation-related as well as other responsibilities as being out-of-scope with respect to DOTS. The following basic DOTS components are all based on the official IETF DOTS Architecture document \cite{dots-architecture}:
 
@@ -333,7 +306,6 @@ DOTS stands for DDoS Open Threat Signaling and is a standard currently developed
 \begin{figure}[H]
 \label{fig:DOTSarchitecture}
 \fbox{\includegraphics[scale=0.3]{Seminar-Template/Talk7/images/DOTS_Interfaces.png}}
-% => Added the use cases as goals section since its thedd only document I found where overall objectives were introduced.
 \centering
 \caption{DOTS Interfaces \cite{dots-architecture}}
 \end{figure}
@@ -432,16 +404,6 @@ Requirements are defined towards how the data model is to be structured, version
 %%-----------------------------------------------------------------
 \section{Architecture}
 
-%\begin{itemize}
-%    \item Description of the architecture.
-%    \item Components
-%    \item Operations
-%    \item .. Sessions, Signaling (recursive)
-    %jan:%
-%    \item Maybe also different topologies / deployment forms?
-%    \item Manual vs automated operation?
-%\end{itemize}
-
 This chapter gives an overview of the main architectural concepts of DOTS, based on the official IETF DOTS architecture document (\cite{dots-architecture}). More specifically, initially the most essential abstractions with respect to relationships among DOTS agents is outlined, followed by an introduction to several signaling-related scenarios enabling efficient DOTS agent collaboration.
 
 \subsection{DOTS agent relationships}
@@ -502,141 +464,6 @@ Although anycast addresses resolving to DOTS servers are not an official require
 
 The main benefits of using anycast in DOTS are firstly, the possibility to use simplified DOTS client configurations, since DOTS clients are only required to know the common anycast server address. This clearly simplifies the process of server discovery from a DOTS client perspective. Secondly, regional- \emph{resp.} customer-specific deployments of DOTS are installed more easily, as the responsibility of resolving to unicast DOTS server addresses is moved away from DOTS clients. Finally, arguably the biggest advantage is that when using anycast server addresses, signaling traffic coming from clients is spread across entire DOTS domains, which provides more resiliency and reduces attack surface.
 
-\iffalse
-%jan:%
-\section{Protocol design}
-Maybe we can also show the proposed design for the protocol, e.g. the signal channel? I think this would be a nice next chapter after the architecture and would give some basis to evaluate current implementations.
-
-\begin{itemize}
-    \item Protocol stack / Used technologies like CoAP, RESTCONF
-    \item Port considerations and server discovery
-    \item CoAP URIs
-    \item Maybe also go into a bit of more detail for one of the operations and walk through a full example E.g. this is how a mitigation request would look like:
-A client would send a CoAP PUT the URI blablabla with the following body, where target-prefix does ... and so on?
-\end{itemize} 
-
-\begin{verbatim}
-    
-     {
-       "ietf-dots-signal-channel:mitigation-scope": {
-         "scope": [
-           {
-             "target-prefix": [
-                "string"
-              ],
-             "target-port-range": [
-                {
-                  "lower-port": number,
-                  "upper-port": number
-                }
-              ],
-              "target-protocol": [
-                number
-              ],
-              "target-fqdn": [
-                "string"
-              ],
-              "target-uri": [
-                "string"
-              ],
-              "alias-name": [
-                "string"
-              ],
-             "lifetime": number,
-             "trigger-mitigation": true|false
-           }
-         ]
-       }
-     }
-\end{verbatim}
-Or in the presentation we could walk through an actual example if its too abstract otherwise, e.g. first show a diagram of how the actors relate with prefixes etc and then how the request would look like e.g:
-This would indicate to the mitigator that the web services of some prefixes are under attack pls do something about it:
-\begin{verbatim}
-         Header: PUT (Code=0.03)
-     Uri-Path: ".well-known"
-     Uri-Path: "dots"
-     Uri-Path: "mitigate"
-     Uri-Path: "cdid=7eeaf349529eb55ed50113"
-     Uri-Path: "cuid=dz6pHjaADkaFTbjr0JGBpw"
-     Uri-Path: "mid=123"
-     Content-Format: "application/dots+cbor"
-
-     {
-       "ietf-dots-signal-channel:mitigation-scope": {
-         "scope": [
-           {
-             "target-prefix": [
-                "2001:db8:6401::1/128",
-                "2001:db8:6401::2/128"
-              ],
-             "target-port-range": [
-               {
-                 "lower-port": 80
-               },
-               {
-                 "lower-port": 443
-               },
-               {
-                  "lower-port": 8080
-               }
-              ],
-              "target-protocol": [
-                6
-              ],
-             "lifetime": 3600
-           }
-         ]
-       }
-     }
-\end{verbatim}
-Then later the client could ask the mitigator about a mitigation state using the GET verb and he would see that the mitigator blocked thousands of TCP packets and 0 UDP packets etc etc.
-
-\begin{verbatim}
-    
-   {
-     "ietf-dots-signal-channel:mitigation-scope": {
-       "scope": [
-         {
-           "mid": 12332,
-           "mitigation-start": "1507818434",
-           "target-prefix": [
-                "2001:db8:6401::1/128",
-                "2001:db8:6401::2/128"
-           ],
-           "target-protocol": [
-             17
-           ],
-           "lifetime": 1756,
-           "status": "attack-successfully-mitigated",
-           "bytes-dropped": "134334555",
-           "bps-dropped": "43344",
-           "pkts-dropped": "333334444",
-           "pps-dropped": "432432"
-         },
-         {
-           "mid": 12333,
-           "mitigation-start": "1507818393",
-           "target-prefix": [
-                "2001:db8:6401::1/128",
-                "2001:db8:6401::2/128"
-           ],
-           "target-protocol": [
-             6
-           ],
-           "lifetime": 1755,
-           "status": "attack-stopped",
-           "bytes-dropped": "0",
-           "bps-dropped": "0",
-           "pkts-dropped": "0",
-           "pps-dropped": "0"
-         }
-       ]
-     }
-   }
-\end{verbatim}{}
-\fi
-
-%%-----------------------------------------------------------------
 
 \section{Current State}
 
@@ -704,8 +531,6 @@ During IETF 105, China Mobile presented their issues regarding deployment requir
 %%-----------------------------------------------------------------
 
 \section{Discussion, Comparison \& Conclusion}
-
-% Summarize and discuss the key points of the other chapters.
 
 Since DOTS specifies only the necessary parties and the protocol that runs between them, comparing DOTS to existing DDoS mitigation solutions is difficult. Products offered by companies like Cloudflare and Akamai consist of a multitude of components, the communication protocol between a customer and a supplier only being a small fraction of it. One could argue that due to the freedom in configuring and setting up the infrastructure, DOTS enables much more user- and use-case specific installations of DDoS mitigation infrastructure. For example, should enough DDoS-mitigation hardware manufacturers choose to adapt DOTS, setting up infrastructures consisting of different products will be much easier.
 
